@@ -2,11 +2,14 @@ import { getArticle, getEpisodes } from '../api/content.js'
 import { createAppHeader } from '../components/AppHeader.js'
 import { initPremiumBlocker, openBlocker } from '../components/PremiumBlocker.js'
 
-export async function renderDetailView(container, { onNavigate, onBack }) {
+export async function renderDetailView(container, { seriesId = 1, onNavigate, onBack }) {
   const [article, episodes] = await Promise.all([
-    getArticle('tato-dayak'),
-    getEpisodes(1),
+    getArticle(seriesId),
+    getEpisodes(seriesId),
   ])
+
+  // Episode pertama yang tidak terkunci = yang dibuka saat "Mulai membaca"
+  const currentEp = episodes.find(ep => !ep.isLocked) || episodes[0]
 
   container.innerHTML = ''
   container.appendChild(createAppHeader({ onBack }))
@@ -15,7 +18,10 @@ export async function renderDetailView(container, { onNavigate, onBack }) {
   main.className = 'page-shell original-detail-page'
 
   const episodeItems = episodes.map(ep => `
-    <article class="${ep.isCurrent ? 'is-current' : ''} ${ep.isLocked ? 'is-locked' : ''}" data-episode-id="${ep.id}">
+    <article
+      class="${ep.isCurrent ? 'is-current' : ''} ${ep.isLocked ? 'is-locked' : ''}"
+      data-episode-id="${ep.id}"
+      ${!ep.isLocked ? `data-goto="view-reader" data-series="${article.id}" data-ep="${ep.id}"` : ''}>
       <span>${ep.number}</span>
       <div>
         <h2>${ep.title}</h2>
@@ -32,7 +38,7 @@ export async function renderDetailView(container, { onNavigate, onBack }) {
         <div class="original-hero-index__content">
           <h1>${article.title}</h1>
           <p id="originalHeroPart">${article.subtitle}</p>
-          <a href="#" data-goto="view-reader">Mulai membaca</a>
+          <a href="#" data-goto="view-reader" data-series="${article.id}" data-ep="${currentEp.id}">Mulai membaca</a>
         </div>
       </div>
     </section>
@@ -68,21 +74,11 @@ export async function renderDetailView(container, { onNavigate, onBack }) {
       e.preventDefault()
       main.querySelectorAll('[data-original-tab]').forEach(t => t.classList.remove('is-active'))
       tab.classList.add('is-active')
-      if (tab.dataset.originalTab === 'description') {
-        main.classList.add('is-description-mode')
-      } else {
-        main.classList.remove('is-description-mode')
-      }
+      main.classList.toggle('is-description-mode', tab.dataset.originalTab === 'description')
     })
   })
 
-  // Navigation
-  main.querySelectorAll('[data-goto]').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault()
-      onNavigate(el.dataset.goto)
-    })
-  })
+  // Navigation data-goto ditangani oleh global handler di main.js
 
   // Premium blocker
   initPremiumBlocker(main.querySelector('.premium-blocker'))

@@ -1,45 +1,54 @@
-import { getArticle } from '../api/content.js'
+import { getHeroBanners } from '../api/content.js'
 import { createAppHeader } from '../components/AppHeader.js'
 
 export async function renderHomeView(container, { onNavigate }) {
-  const article = await getArticle('tato-dayak')
+  const banners = await getHeroBanners()
+  const hero    = banners[0] || null
 
   container.innerHTML = ''
   container.appendChild(createAppHeader({ onBack: () => {} }))
 
   const main = document.createElement('main')
   main.className = 'original-index-page'
+
+  const heroImage       = hero?.imageUrl    || '/assets/tato-dayak1.png'
+  const heroTitle       = hero?.title       || ''
+  const heroDescription = hero?.description || ''
+  const seriesId        = hero?.seriesId    || 1
+
+  // Card per banner (section "Terbaru")
+  const cardItems = banners.map(b => `
+    <article class="original-card"
+             data-goto="view-detail"
+             data-series="${b.seriesId}">
+      <div class="original-card__media">
+        <img src="${b.imageUrl}" alt="${b.title}" />
+      </div>
+      <h3>${b.title}</h3>
+      <p>${b.seriesTitle || ''}</p>
+    </article>
+  `).join('')
+
   main.innerHTML = `
     <section class="original-index-hero">
-      <img class="original-index-hero__image" src="${article.heroImage}" alt="${article.title}" />
+      <img class="original-index-hero__image" src="${heroImage}" alt="${heroTitle}" />
       <img class="original-index-hero__logo" src="/assets/logo-laya.png" alt="Laya" />
       <div class="original-index-hero__content">
-        <h2>Tato Dayak:<br />Suara Penjaga Tradisi</h2>
-        <p>Dalam budaya Dayak, setiap tato menyimpan cerita tentang keberanian, status sosial, hingga hubungan manusia dengan alam dan roh</p>
-        <a href="#" data-goto="view-detail">Baca sekarang</a>
+        <h2>${heroTitle}</h2>
+        ${heroDescription ? `<p>${heroDescription}</p>` : ''}
+        <a href="#" data-goto="view-detail" data-series="${seriesId}">Baca sekarang</a>
       </div>
     </section>
     <section class="original-index-latest">
       <h2>Terbaru</h2>
       <div class="original-grid">
-        <article class="original-card" data-goto="view-detail">
-          <div class="original-card__media original-card__media--red">
-            <span>Laya</span>
-          </div>
-          <h3>Bagian 1: Mengenal Pak Ding</h3>
-          <p>${article.category}</p>
-        </article>
+        ${cardItems}
       </div>
     </section>
   `
 
-  main.querySelectorAll('[data-goto]').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault()
-      onNavigate(el.dataset.goto)
-    })
-  })
+  // Navigation data-goto ditangani oleh global handler di main.js
 
   container.appendChild(main)
-  return { article }
+  return { banners }
 }

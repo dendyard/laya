@@ -28,6 +28,15 @@ export function pauseMusic() {
   audio?.pause()
 }
 
+export function destroyMusicPlayer() {
+  if (audio) {
+    audio.pause()
+    audio.src = ''  // force stop & release resource — cegah audio zombie
+    audio = null
+  }
+  buttons = []
+}
+
 export function toggleMusic() {
   if (!audio) return
   audio.paused ? audio.play().catch(() => {}) : audio.pause()
