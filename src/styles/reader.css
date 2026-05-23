@@ -351,6 +351,7 @@
 .reel-slide.is-dragging > .jx-player-container,
 .reel-slide.is-dragging .reel-copy { transition: none; }
 .reel-slide.is-expanded .reel-top { top: 16px; right: auto; left: 16px; }
+.reel-slide.is-expanded .reel-pos { display: none; }
 .reel-slide.is-expanded .reel-top > div { display: none; }
 .reel-slide.is-expanded .reel-top a { display: none; }
 .reel-slide.is-expanded .reel-actions { display: none; }
