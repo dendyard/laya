@@ -36,3 +36,7 @@ export function getPlayer(slide) { return players.get(slide) }
 export function pausePlayer(slide) { try { players.get(slide)?.pause() } catch {} }
 export function pauseAll() { players.forEach(p => { try { p.pause() } catch {} }) }
 export function resumePlayer(slide) { try { players.get(slide)?.play() } catch {} }
+export function clearAll() {
+  players.forEach(p => { try { p.pause() } catch {} })
+  players.clear()
+}
