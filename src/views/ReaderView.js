@@ -1,6 +1,6 @@
-import { getSlides } from '../api/content.js'
+import { getSlides, getEpisode } from '../api/content.js'
 import { initJXPlayer, pauseAll, getPlayer, clearAll } from '../components/JXPlayer.js'
-import { initMusicPlayer, registerMusicButtons, playMusic, pauseMusic, toggleMusic } from '../components/MusicPlayer.js'
+import { initMusicPlayer, registerMusicButtons, playMusic, destroyMusicPlayer, toggleMusic } from '../components/MusicPlayer.js'
 import { initReaderIntro, showIntro, dismissIntro } from '../components/ReaderIntro.js'
 // (showIntro & playMusic dipanggil di renderReaderView agar intro overlay
 //  punya timer aktif — tanpa ini, dismissIntro selalu return early.)
@@ -8,16 +8,19 @@ import { initReaderIntro, showIntro, dismissIntro } from '../components/ReaderIn
 let readerLazyObserver = null
 let renderCount = 0  // counter untuk unique container ID — JX SDK menolak ID yang sama
 
-export async function renderReaderView(container, { onClose }) {
-  const slides = await getSlides(1)
+export async function renderReaderView(container, { seriesId = 1, epId = 1, onClose }) {
+  const [episode, slides] = await Promise.all([
+    getEpisode(epId),
+    getSlides(epId),
+  ])
   renderCount++  // naikkan counter tiap render baru → container ID unik
 
   container.innerHTML = ''
 
-  // Audio
+  // Audio — src dari API (musik_bg), fallback ke file lokal
   const audio = document.createElement('audio')
   audio.id = 'bgMusic'
-  audio.src = '/assets/Moss Canopy.mp3'
+  audio.src = episode.musikBg || ''
   audio.loop = true
   audio.preload = 'auto'
   container.appendChild(audio)
@@ -39,10 +42,8 @@ export async function renderReaderView(container, { onClose }) {
 
   const slidesHTML = slides.map((slide, i) => {
     const isFirst = i === 0
-    const contentHTML = slide.content.map(block => {
-      if (block.type === 'h1') return `<h1>${block.text}</h1>`
-      return `<p>${block.text}</p>`
-    }).join('')
+    // content sudah berupa HTML string dari API
+    const contentHTML = slide.content || ''
 
     return `
       <section class="reel-slide reel-slide--${numberToWord(i + 1)}" aria-label="Halaman ${i + 1} dari ${slides.length}">
@@ -165,7 +166,7 @@ export function activateReaderView(container) {
 
 export function deactivateReaderView() {
   pauseAll()
-  pauseMusic()
+  destroyMusicPlayer()  // stop + release audio resource, cegah zombie playback
   clearAll()
   if (readerLazyObserver) { readerLazyObserver.disconnect(); readerLazyObserver = null }
 }

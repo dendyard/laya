@@ -100,20 +100,6 @@
   content: "";
 }
 .reel-slide.is-video-loading { background: #000; }
-.reel-slide.is-video-loading::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 5;
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255,255,255,0.28);
-  border-top-color: #fff;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: reelLoaderSpin 800ms linear infinite;
-  content: "";
-}
 .reel-slide.is-video-loading > img,
 .reel-slide.is-video-loading > video,
 .reel-slide.is-video-loading > iframe,

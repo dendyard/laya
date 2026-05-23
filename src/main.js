@@ -5,16 +5,15 @@ import './styles/detail.css'
 import './styles/reader.css'
 import './styles/components.css'
 
-import { initRouter, navigate, getPageFromURL } from './router.js'
+import { initRouter, navigate, getRouteFromURL } from './router.js'
 import { renderHomeView } from './views/HomeView.js'
 import { renderDetailView } from './views/DetailView.js'
-import { renderReaderView, activateReaderView, deactivateReaderView } from './views/ReaderView.js'
+import { renderReaderView, deactivateReaderView } from './views/ReaderView.js'
 
 const app = document.getElementById('app')
 
-// View containers (cached after first render)
 const views = {
-  'view-index': null,
+  'view-index':  null,
   'view-detail': null,
   'view-reader': null,
 }
@@ -22,9 +21,12 @@ const views = {
 let currentView = null
 let readerRendered = false
 
-async function showView(viewId, pushState = true) {
-  // Deactivate current reader & hapus DOM-nya — fresh render setiap masuk
-  // (mengikuti perilaku page reload Node.js source agar JX player tidak korup)
+/**
+ * showView(viewId, params, pushState)
+ *   params: { series?: number, ep?: number }
+ */
+async function showView(viewId, params = {}, pushState = true) {
+  // Destroy reader DOM saat keluar — fresh render setiap masuk
   if (currentView === 'view-reader') {
     deactivateReaderView()
     const oldReader = views['view-reader']
@@ -35,13 +37,19 @@ async function showView(viewId, pushState = true) {
     }
   }
 
-  // Hide all
-  app.querySelectorAll('.view').forEach(el => el.classList.remove('is-active'))
+  // Destroy detail saat navigasi ke view lain agar data reload
+  if (currentView === 'view-detail' && viewId !== 'view-detail') {
+    const oldDetail = views['view-detail']
+    if (oldDetail) {
+      oldDetail.remove()
+      views['view-detail'] = null
+    }
+  }
 
-  // Scroll reset
+  app.querySelectorAll('.view').forEach(el => el.classList.remove('is-active'))
   if (viewId !== 'view-reader') window.scrollTo(0, 0)
 
-  navigate(viewId, pushState)
+  navigate(viewId, params, pushState)
   currentView = viewId
 
   let viewEl = views[viewId]
@@ -53,34 +61,47 @@ async function showView(viewId, pushState = true) {
     app.appendChild(viewEl)
     views[viewId] = viewEl
 
+    const seriesId = params.series || 1
+    const epId     = params.ep     || 1
+
     if (viewId === 'view-index') {
       await renderHomeView(viewEl, { onNavigate: showView })
+
     } else if (viewId === 'view-detail') {
       await renderDetailView(viewEl, {
+        seriesId,
         onNavigate: showView,
         onBack: () => showView('view-index'),
       })
+
     } else if (viewId === 'view-reader') {
-      await renderReaderView(viewEl, { onClose: () => showView('view-detail') })
+      await renderReaderView(viewEl, {
+        seriesId,
+        epId,
+        onClose: () => showView('view-detail', { series: seriesId }),
+      })
       readerRendered = true
     }
-  } else if (viewId === 'view-reader' && readerRendered) {
-    activateReaderView(viewEl)
   }
 
   viewEl.classList.add('is-active')
 }
 
-// Init router
-initRouter((viewId, pushState) => showView(viewId, pushState))
+// Router — popstate
+initRouter((viewId, params, pushState) => showView(viewId, params, pushState))
 
-// Handle [data-goto] clicks at app level
+// data-goto clicks — baca data-series & data-ep dari elemen
 app.addEventListener('click', e => {
   const el = e.target.closest('[data-goto]')
-  if (el) { e.preventDefault(); showView(el.dataset.goto) }
+  if (!el) return
+  e.preventDefault()
+  const params = {}
+  if (el.dataset.series) params.series = parseInt(el.dataset.series, 10)
+  if (el.dataset.ep)     params.ep     = parseInt(el.dataset.ep,     10)
+  showView(el.dataset.goto, params)
 })
 
-// Start on correct page
-const initialPage = getPageFromURL()
-const pageMap = { home: 'view-index', detail: 'view-detail', read: 'view-reader' }
-showView(pageMap[initialPage] || 'view-index', false)
+// Mulai dari URL saat ini
+const { page, series, ep } = getRouteFromURL()
+const pageToView = { home: 'view-index', detail: 'view-detail', read: 'view-reader' }
+showView(pageToView[page] || 'view-index', { series, ep }, false)

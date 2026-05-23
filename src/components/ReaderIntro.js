@@ -21,12 +21,12 @@ export function showIntro() {
   minTimer = setTimeout(() => {
     minReady = true
     if (videoPending) dismissIntro()
-  }, 1500)
+  }, 500)
 
   fallbackTimer = setTimeout(() => {
     minReady = true
     dismissIntro()
-  }, 8000)
+  }, 2000)
 }
 
 export function dismissIntro() {
