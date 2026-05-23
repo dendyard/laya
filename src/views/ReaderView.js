@@ -52,6 +52,7 @@ export async function renderReaderView(container, { seriesId = 1, epId = 1, onCl
           <button class="music-btn" type="button" aria-label="Play/Pause musik">
             <span class="music-bars"><span></span><span></span><span></span><span></span></span>
           </button>
+          <span class="reel-pos" aria-live="polite">${i + 1} dari ${slides.length}</span>
           <a href="#" class="reel-close-btn" aria-label="Tutup">
             <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M72 72l112 112M184 72 72 184"/></svg>
           </a>
