@@ -190,8 +190,12 @@
   letter-spacing: -0.2px;
   line-height: 18px;
 }
-.original-episode-list .is-current h2 { color: var(--font-primary); }
-.original-episode-list .is-current time { color: var(--text-secondary); }
+.original-episode-list article:not(.is-locked) h2 { color: var(--font-primary); }
+.original-episode-list article:not(.is-locked) time { color: var(--text-secondary); }
+.original-episode-list article:not(.is-locked) span {
+  border-color: var(--font-primary);
+  color: var(--font-primary);
+}
 .original-episode-list i {
   width: 16px;
   height: 16px;
