@@ -1,12 +1,16 @@
 import { getSlides } from '../api/content.js'
-import { initJXPlayer, pauseAll, getPlayer } from '../components/JXPlayer.js'
+import { initJXPlayer, pauseAll, getPlayer, clearAll } from '../components/JXPlayer.js'
 import { initMusicPlayer, registerMusicButtons, playMusic, pauseMusic, toggleMusic } from '../components/MusicPlayer.js'
 import { initReaderIntro, showIntro, dismissIntro } from '../components/ReaderIntro.js'
+// (showIntro & playMusic dipanggil di renderReaderView agar intro overlay
+//  punya timer aktif — tanpa ini, dismissIntro selalu return early.)
 
 let readerLazyObserver = null
+let renderCount = 0  // counter untuk unique container ID — JX SDK menolak ID yang sama
 
 export async function renderReaderView(container, { onClose }) {
   const slides = await getSlides(1)
+  renderCount++  // naikkan counter tiap render baru → container ID unik
 
   container.innerHTML = ''
 
@@ -42,7 +46,7 @@ export async function renderReaderView(container, { onClose }) {
 
     return `
       <section class="reel-slide reel-slide--${numberToWord(i + 1)}" aria-label="Halaman ${i + 1} dari ${slides.length}">
-        <div id="videocontainer-${i + 1}" class="jx-player-container" data-jx-video-id="${slide.videoId}"></div>
+        <div id="videocontainer-${renderCount}-${i + 1}" class="jx-player-container" data-jx-video-id="${slide.videoId}"></div>
         <div class="reel-top">
           <button class="music-btn" type="button" aria-label="Play/Pause musik">
             <span class="music-bars"><span></span><span></span><span></span><span></span></span>
@@ -74,6 +78,8 @@ export async function renderReaderView(container, { onClose }) {
   // Init components
   initMusicPlayer(audio)
   initReaderIntro(overlay, container)
+  showIntro()
+  playMusic()
   registerMusicButtons(container.querySelectorAll('.music-btn'))
 
   // Music toggle, close, helper dismiss, and reel-copy expand/collapse
@@ -160,6 +166,8 @@ export function activateReaderView(container) {
 export function deactivateReaderView() {
   pauseAll()
   pauseMusic()
+  clearAll()
+  if (readerLazyObserver) { readerLazyObserver.disconnect(); readerLazyObserver = null }
 }
 
 function setupLazyLoad(reelsReader, onFirstVideoStart) {

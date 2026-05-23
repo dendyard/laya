@@ -23,8 +23,17 @@ let currentView = null
 let readerRendered = false
 
 async function showView(viewId, pushState = true) {
-  // Deactivate current
-  if (currentView === 'view-reader') deactivateReaderView()
+  // Deactivate current reader & hapus DOM-nya — fresh render setiap masuk
+  // (mengikuti perilaku page reload Node.js source agar JX player tidak korup)
+  if (currentView === 'view-reader') {
+    deactivateReaderView()
+    const oldReader = views['view-reader']
+    if (oldReader) {
+      oldReader.remove()
+      views['view-reader'] = null
+      readerRendered = false
+    }
+  }
 
   // Hide all
   app.querySelectorAll('.view').forEach(el => el.classList.remove('is-active'))
