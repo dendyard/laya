@@ -54,6 +54,19 @@ export async function getEpisode(episodeId) {
   }
 }
 
+export async function getLatestEpisodes(limit = 5) {
+  const res = await get(`/episodes/latest?limit=${limit}`)
+  return res.data.map(ep => ({
+    id:          ep.id,
+    title:       ep.title,
+    seriesId:    ep.series?.id || ep.series_id,
+    seriesTitle: ep.series?.title || '',
+    thumbnail:   ep.card_image,
+    publishDate: ep.publish_date || '',
+    category:    ep.series?.category_name || '',
+  }))
+}
+
 export async function getSlides(episodeId) {
   const res = await get(`/episodes/${episodeId}/slides`)
   return res.data.map(s => ({

@@ -1,9 +1,12 @@
-import { getHeroBanners } from '../api/content.js'
+import { getHeroBanners, getLatestEpisodes } from '../api/content.js'
 import { createAppHeader } from '../components/AppHeader.js'
 
 export async function renderHomeView(container, { onNavigate }) {
-  const banners = await getHeroBanners()
-  const hero    = banners[0] || null
+  const [banners, latestEpisodes] = await Promise.all([
+    getHeroBanners(),
+    getLatestEpisodes(5),
+  ])
+  const hero = banners[0] || null
 
   container.innerHTML = ''
   container.appendChild(createAppHeader({ onBack: () => {} }))
@@ -16,16 +19,18 @@ export async function renderHomeView(container, { onNavigate }) {
   const heroDescription = hero?.description || ''
   const seriesId        = hero?.seriesId    || 1
 
-  // Card per banner (section "Terbaru")
-  const cardItems = banners.map(b => `
+  // Card per latest episode (section "Terbaru")
+  const cardItems = latestEpisodes.map(ep => `
     <article class="original-card"
-             data-goto="view-detail"
-             data-series="${b.seriesId}">
+             data-goto="view-reader"
+             data-series="${ep.seriesId}"
+             data-ep="${ep.id}">
       <div class="original-card__media">
-        <img src="${b.imageUrl}" alt="${b.title}" />
+        <img src="${ep.thumbnail}" alt="${ep.title}" />
       </div>
-      <h3>${b.title}</h3>
-      <p>${b.seriesTitle || ''}</p>
+      <h3>${ep.title}</h3>
+      <p>${ep.seriesTitle || ''}</p>
+      <time>${ep.publishDate || ''}</time>
     </article>
   `).join('')
 
