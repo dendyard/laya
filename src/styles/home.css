@@ -1,0 +1,191 @@
+/* ---- ORIGINAL INDEX ---- */
+.original-index-page {
+  width: min(100%, 430px);
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+}
+.original-index-hero {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  min-height: 0;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+}
+.original-index-hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.86;
+}
+.original-index-hero::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.1) 10%, rgba(0,0,0,0.12) 42%, rgba(0,0,0,0.88) 100%),
+    radial-gradient(circle at 50% 38%, rgba(0,0,0,0) 0 34%, rgba(0,0,0,0.42) 78%);
+  content: "";
+}
+.original-index-hero__logo {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  z-index: 1;
+  width: 156px;
+  height: auto;
+  object-fit: contain;
+}
+.original-index-hero__content {
+  position: absolute;
+  right: 24px;
+  bottom: 32px;
+  left: 24px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.original-index-hero__content h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  line-height: 31px;
+}
+.original-index-hero__content > p {
+  max-width: 310px;
+  margin: 12px 0 20px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 21px;
+}
+.original-index-hero__content a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 144px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 6px;
+  background: #1187d4;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 20px;
+  cursor: pointer;
+}
+.original-index-latest {
+  padding: 24px 0 48px;
+  background: #fff;
+}
+.original-index-latest > h2 {
+  margin: 0 16px 16px;
+  color: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 31px;
+}
+.original-grid {
+  display: flex;
+  gap: 16px;
+  padding: 0 16px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 16px;
+  scroll-padding-right: 16px;
+  scrollbar-width: none;
+}
+.original-grid::-webkit-scrollbar { display: none; }
+.original-card {
+  flex: 0 0 200px;
+  width: 200px;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+.original-card__media {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  padding: 18px;
+  border-radius: 18px;
+  color: #fff;
+}
+.original-card__media--red {
+  background: url("/assets/tato-dayak1.png") center / cover;
+}
+.original-card__media--green {
+  background: url("/assets/tato-dayak2.png") center / cover;
+}
+.original-card__media--blue {
+  background:
+    linear-gradient(135deg, rgba(59,130,246,0.82), rgba(20,184,166,0.82)),
+    url("https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=500&q=80") center / cover;
+}
+.original-card__media--amber {
+  background:
+    linear-gradient(135deg, rgba(245,158,11,0.9), rgba(127,29,29,0.85)),
+    url("https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=500&q=80") center / cover;
+}
+.original-card__media--purple {
+  background:
+    linear-gradient(135deg, rgba(124,58,237,0.85), rgba(15,118,110,0.78)),
+    url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=500&q=80") center / cover;
+}
+.original-card__media span {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  min-width: 0;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.original-card__media strong { display: none; }
+.original-card h3 {
+  width: 200px;
+  margin: 8px 0 8px;
+  color: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 23px;
+}
+.original-card p,
+.original-card time {
+  display: block;
+  width: 200px;
+  margin: 0;
+  color: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 18px;
+}
+.original-card time {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+}
