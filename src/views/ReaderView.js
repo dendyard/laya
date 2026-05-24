@@ -1,4 +1,4 @@
-import { getSlides, getEpisode } from '../api/content.js'
+import { getSlides, getEpisode, getEpisodes } from '../api/content.js'
 import { initJXPlayer, pauseAll, getPlayer, clearAll } from '../components/JXPlayer.js'
 import { initMusicPlayer, registerMusicButtons, playMusic, destroyMusicPlayer, toggleMusic } from '../components/MusicPlayer.js'
 import { initReaderIntro, showIntro, dismissIntro } from '../components/ReaderIntro.js'
@@ -9,10 +9,15 @@ let readerLazyObserver = null
 let renderCount = 0  // counter untuk unique container ID — JX SDK menolak ID yang sama
 
 export async function renderReaderView(container, { seriesId = 1, epId = 1, onClose }) {
-  const [episode, slides] = await Promise.all([
+  const [episode, slides, allEpisodes] = await Promise.all([
     getEpisode(epId),
     getSlides(epId),
+    getEpisodes(seriesId),
   ])
+
+  // Tentukan episode berikutnya
+  const currentIdx = allEpisodes.findIndex(ep => ep.id === epId)
+  const nextEp     = currentIdx >= 0 ? allEpisodes[currentIdx + 1] : null
   renderCount++  // naikkan counter tiap render baru → container ID unik
 
   container.innerHTML = ''
@@ -77,6 +82,21 @@ export async function renderReaderView(container, { seriesId = 1, epId = 1, onCl
   main.innerHTML = slidesHTML
   container.appendChild(main)
 
+  // Inject end card ke dalam reel-copy slide terakhir
+  const lastCopy = main.querySelector('.reel-slide:last-child .reel-copy')
+  if (lastCopy) {
+    const endCard = document.createElement('div')
+    endCard.className = 'reel-end-inline'
+    endCard.innerHTML = buildEndCard(nextEp, seriesId) + `
+      <div class="reel-end-separator"></div>
+      <a class="reel-end-more" href="#" data-goto="view-index">
+        <span>Lihat Konten Laya Lainnya</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    `
+    lastCopy.appendChild(endCard)
+  }
+
   // Init components
   initMusicPlayer(audio)
   initReaderIntro(overlay, container)
@@ -86,6 +106,19 @@ export async function renderReaderView(container, { seriesId = 1, epId = 1, onCl
 
   // Music toggle, close, helper dismiss, and reel-copy expand/collapse
   container.addEventListener('click', e => {
+    // Notify button
+    if (e.target.closest('.reel-notify-btn')) {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') {
+            e.target.textContent = 'Notifikasi Aktif ✓'
+            e.target.disabled = true
+          }
+        })
+      }
+      return
+    }
+
     // Music
     if (e.target.closest('.music-btn')) { toggleMusic(); return }
 
@@ -312,6 +345,58 @@ function collapseSlide(slide) {
   setTimeout(() => {
     slide.classList.remove('is-expanded', 'is-closing')
   }, 260)
+}
+
+function buildEndCard(nextEp, seriesId) {
+  if (!nextEp) {
+    // Tidak ada episode berikutnya → Aktifkan Notifikasi
+    return `
+      <div class="reel-end-card reel-end-card--notify">
+        <svg class="reel-end-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="reel-end-card__body">
+          <h3>Kamu sudah membaca semua episode!</h3>
+          <p>Aktifkan notifikasi agar kamu tahu saat episode baru tersedia.</p>
+        </div>
+        <button class="reel-end-card__btn reel-notify-btn" type="button">Aktifkan Notifikasi</button>
+      </div>
+    `
+  }
+
+  if (nextEp.isPublished) {
+    // Episode berikutnya sudah publish
+    return `
+      <a class="reel-end-card reel-end-card--next"
+         href="#"
+         data-goto="view-reader"
+         data-series="${seriesId}"
+         data-ep="${nextEp.id}">
+        ${nextEp.cardImage ? `<img class="reel-end-card__thumb" src="${nextEp.cardImage}" alt="${nextEp.title}" />` : ''}
+        <div class="reel-end-card__body">
+          <span class="reel-end-card__chip">Episode Berikutnya</span>
+          <h3>${nextEp.title}</h3>
+          <p>${nextEp.date || ''}</p>
+        </div>
+        <svg class="reel-end-card__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </a>
+    `
+  }
+
+  // Episode berikutnya belum publish → Akan Datang
+  return `
+    <div class="reel-end-card reel-end-card--soon">
+      ${nextEp.cardImage ? `<img class="reel-end-card__thumb" src="${nextEp.cardImage}" alt="${nextEp.title}" />` : ''}
+      <div class="reel-end-card__body">
+        <span class="reel-end-card__chip reel-end-card__chip--soon">Akan Datang</span>
+        <h3>${nextEp.title}</h3>
+        <p>Episode selanjutnya sedang dalam persiapan.</p>
+      </div>
+    </div>
+  `
 }
 
 function numberToWord(n) {
