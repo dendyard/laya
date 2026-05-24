@@ -187,7 +187,7 @@
 .reel-actions { display: none; }
 .reel-copy {
   position: absolute;
-  right: 64px;
+  right: 20px;
   bottom: 72px;
   left: 20px;
   z-index: 4;
@@ -408,3 +408,134 @@
   line-clamp: unset;
 }
 .reel-slide.is-expanded .reel-page-chip { display: none; }
+
+/* ---- END CARD (inline, di bawah konten slide terakhir) ---- */
+.reel-end-inline {
+  margin-top: 24px;
+  padding-bottom: 8px;
+}
+.reel-end-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  text-decoration: none;
+}
+.reel-end-card__thumb {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.reel-end-card__icon {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  stroke: rgba(255,255,255,0.8);
+}
+.reel-end-card__body {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.reel-end-card__chip {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  margin-bottom: 4px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  color: #111;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+}
+.reel-end-card__chip--soon {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
+.reel-end-card__body h3 {
+  margin: 0 0 2px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 19px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.reel-end-card__body p {
+  margin: 0;
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+.reel-end-card__arrow {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+}
+/* Notify card — vertikal */
+.reel-end-card--notify {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.reel-end-card--notify .reel-end-card__body h3 {
+  -webkit-line-clamp: unset;
+  font-size: 15px;
+}
+.reel-end-card--notify .reel-end-card__body p {
+  margin-top: 2px;
+}
+.reel-end-card__btn {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  cursor: pointer;
+}
+.reel-end-card--soon { opacity: 0.7; cursor: default; }
+
+.reel-end-separator {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+.reel-end-more {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0 16px;
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.reel-end-more:hover { color: #fff; }
+.reel-end-more svg {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}

@@ -35,12 +35,14 @@ export async function getArticle(seriesId) {
 export async function getEpisodes(seriesId) {
   const res = await get(`/series/${seriesId}/episodes`)
   return res.data.map((ep, i) => ({
-    id:        ep.id,
-    number:    ep.number,
-    title:     ep.title,
-    date:      ep.publish_date,
-    isCurrent: i === 0 && ep.is_published === 1,
-    isLocked:  ep.is_locked === 1,
+    id:          ep.id,
+    number:      ep.number,
+    title:       ep.title,
+    date:        ep.publish_date,
+    isCurrent:   i === 0 && ep.is_published === 1,
+    isLocked:    ep.is_locked === 1,
+    isPublished: ep.is_published === 1,
+    cardImage:   ep.card_image || null,
   }))
 }
 
