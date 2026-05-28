@@ -91,15 +91,9 @@ export async function renderLandingView(el, { seriesId } = {}) {
     <header class="landing-topbar" aria-label="Kompas.com">
       <div class="landing-topbar__inner">
         <a class="landing-topbar__logo" href="https://www.kompas.com" aria-label="Kompas.com" target="_blank" rel="noopener">
-          <img src="/assets/kompaslogo_ori.png" alt="Kompas.com" />
+          <img src="/assets/logogram-kompascom.svg" alt="Kompas.com" />
         </a>
         <div class="landing-topbar__actions">
-          <button class="landing-topbar__icon" aria-label="Cari">
-            <svg viewBox="0 0 256 256" aria-hidden="true">
-              <circle cx="112" cy="112" r="72" stroke-width="20"/>
-              <line x1="163" y1="163" x2="208" y2="208" stroke-width="20"/>
-            </svg>
-          </button>
           <button class="landing-topbar__icon" aria-label="Akun">
             <svg viewBox="0 0 256 256" aria-hidden="true">
               <circle cx="128" cy="128" r="96" stroke-width="18"/>
@@ -163,15 +157,8 @@ export async function renderLandingView(el, { seriesId } = {}) {
     <header class="landing-site-header" aria-label="Kompas.com header">
       <div class="landing-site-header__top">
         <a class="landing-site-header__logo" href="https://www.kompas.com" aria-label="Kompas.com" target="_blank" rel="noopener">
-          <img src="/assets/kompaslogo_ori.png" alt="Kompas.com" />
+          <img src="/assets/logogram-kompascom.svg" alt="Kompas.com" />
         </a>
-        <div class="landing-site-header__search" role="search" aria-label="Cari">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" stroke-width="2"/>
-            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke-width="2"/>
-          </svg>
-          <span>Cari topik, tokoh, atau peristiwa</span>
-        </div>
         <div class="landing-site-header__actions">
           <a class="landing-site-header__subscribe" href="https://www.kompas.id" target="_blank" rel="noopener">Langganan Kompas.id</a>
         </div>

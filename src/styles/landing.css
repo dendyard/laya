@@ -39,8 +39,8 @@
   align-items: center;
 }
 .landing-topbar__logo img {
-  width: auto;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 .landing-topbar__actions {
@@ -271,34 +271,9 @@
     flex: 0 0 auto;
   }
   .landing-site-header__logo img {
-    width: auto;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
-  }
-  .landing-site-header__search {
-    flex: 1 1 0;
-    max-width: 360px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 36px;
-    padding: 0 12px;
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 8px;
-    background: rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.5);
-    font-size: 13px;
-  }
-  .landing-site-header__search svg {
-    flex: 0 0 16px;
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 2;
-    opacity: 0.5;
   }
   .landing-site-header__actions {
     display: flex;
