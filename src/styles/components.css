@@ -1,3 +1,73 @@
+/* ---- BROWSER BANNER ---- */
+#browser-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(calc(100% - 32px), 398px);
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #1c1c1e;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+  color: #fff;
+  transform: translate(-50%, 120%);
+  transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#browser-banner.is-visible  { transform: translate(-50%, 0); }
+#browser-banner.is-hiding   { transform: translate(-50%, 120%); transition-timing-function: ease-in; }
+.browser-banner__icon {
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+.browser-banner__icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+}
+.browser-banner__body {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.browser-banner__body strong {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  line-height: 18px;
+}
+.browser-banner__body span {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  line-height: 16px;
+}
+.browser-banner__close {
+  flex: 0 0 28px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+}
+.browser-banner__close svg {
+  width: 14px;
+  height: 14px;
+}
+
 /* ---- MUSIC BUTTON ---- */
 .music-btn {
   display: grid;

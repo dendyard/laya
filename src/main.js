@@ -4,11 +4,14 @@ import './styles/home.css'
 import './styles/detail.css'
 import './styles/reader.css'
 import './styles/components.css'
+import './styles/landing.css'
 
 import { initRouter, navigate, getRouteFromURL } from './router.js'
+import { initBrowserBanner, detectBrowser } from './utils/browserDetect.js'
 import { renderHomeView } from './views/HomeView.js'
 import { renderDetailView } from './views/DetailView.js'
 import { renderReaderView, deactivateReaderView } from './views/ReaderView.js'
+import { renderLandingView } from './views/LandingView.js'
 
 const app = document.getElementById('app')
 
@@ -101,7 +104,21 @@ app.addEventListener('click', e => {
   showView(el.dataset.goto, params)
 })
 
-// Mulai dari URL saat ini
-const { page, series, ep } = getRouteFromURL()
-const pageToView = { home: 'view-index', detail: 'view-detail', read: 'view-reader' }
-showView(pageToView[page] || 'view-index', { series, ep }, false)
+// Deteksi in-app / WebView browser
+const browserInfo = detectBrowser()
+console.log('[BrowserDetect]', browserInfo)
+
+// Jika diakses via browser standar (bukan in-app / WebView), tampilkan landing page
+if (browserInfo.isStandard) {
+  const { series } = getRouteFromURL()
+  const landingEl = document.createElement('div')
+  landingEl.id = 'view-landing'
+  app.appendChild(landingEl)
+  renderLandingView(landingEl, { seriesId: series || null })
+} else {
+  initBrowserBanner()
+  // Mulai dari URL saat ini
+  const { page, series, ep } = getRouteFromURL()
+  const pageToView = { home: 'view-index', detail: 'view-detail', read: 'view-reader' }
+  showView(pageToView[page] || 'view-index', { series, ep }, false)
+}
