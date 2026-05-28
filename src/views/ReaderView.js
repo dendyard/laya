@@ -1,4 +1,4 @@
-import { getSlides, getEpisode, getEpisodes } from '../api/content.js'
+import { getSlides, getEpisode, getEpisodes, getLatestEpisodes } from '../api/content.js'
 import { initJXPlayer, pauseAll, getPlayer, clearAll } from '../components/JXPlayer.js'
 import { initMusicPlayer, registerMusicButtons, playMusic, destroyMusicPlayer, toggleMusic } from '../components/MusicPlayer.js'
 import { initReaderIntro, showIntro, dismissIntro } from '../components/ReaderIntro.js'
@@ -9,10 +9,11 @@ let readerLazyObserver = null
 let renderCount = 0  // counter untuk unique container ID — JX SDK menolak ID yang sama
 
 export async function renderReaderView(container, { seriesId = 1, epId = 1, onClose }) {
-  const [episode, slides, allEpisodes] = await Promise.all([
+  const [episode, slides, allEpisodes, latestEpisodes] = await Promise.all([
     getEpisode(epId),
     getSlides(epId),
     getEpisodes(seriesId),
+    getLatestEpisodes(8),
   ])
 
   // Tentukan episode berikutnya
@@ -71,7 +72,7 @@ export async function renderReaderView(container, { seriesId = 1, epId = 1, onCl
           <div class="reel-reader-helper" role="button" tabindex="0" aria-label="Tutup bantuan membaca">
             <div>
               <img src="/assets/click-1.svg" alt="" aria-hidden="true" />
-              <span>Klik area text untuk melihat semua paragraf</span>
+              <span>Scroll atau Klik area text untuk melihat semua paragraf</span>
             </div>
           </div>
         ` : ''}
@@ -79,7 +80,9 @@ export async function renderReaderView(container, { seriesId = 1, epId = 1, onCl
     `
   }).join('')
 
-  const endSlideHTML = buildEndSlide(nextEp, seriesId)
+  // Rail: episode dari seri lain (exclude current series)
+  const railItems = latestEpisodes.filter(ep => ep.seriesId !== seriesId).slice(0, 6)
+  const endSlideHTML = buildEndSlide(nextEp, seriesId, railItems)
 
   main.innerHTML = slidesHTML + endSlideHTML
   container.appendChild(main)
@@ -334,75 +337,92 @@ function collapseSlide(slide) {
   }, 260)
 }
 
-function buildEndSlide(nextEp, seriesId) {
-  const cardHTML = buildEndCardContent(nextEp, seriesId)
+function buildEndSlide(nextEp, seriesId, railItems = []) {
+  // ── Next card ──────────────────────────────────────────────
+  let nextSection = ''
+  if (nextEp) {
+    const imgTag = nextEp.cardImage
+      ? `<img src="${nextEp.cardImage}" alt="${nextEp.title}" />`
+      : ''
+    const subtitle = nextEp.date || ''
+
+    if (nextEp.isPublished) {
+      nextSection = `
+        <h1 class="reader-next-heading">Artikel Selanjutnya</h1>
+        <a class="reader-next-card" href="#"
+           data-goto="view-reader"
+           data-series="${seriesId}"
+           data-ep="${nextEp.id}"
+           aria-label="${nextEp.title}">
+          ${imgTag}
+          <div class="reader-next-card__content">
+            <h2>${nextEp.title}</h2>
+            ${subtitle ? `<p>${subtitle}</p>` : ''}
+            <span class="reader-next-card__btn">Mulai Membaca</span>
+          </div>
+        </a>
+      `
+    } else {
+      nextSection = `
+        <h1 class="reader-next-heading">Artikel Selanjutnya</h1>
+        <div class="reader-next-card reader-next-card--soon">
+          ${imgTag}
+          <div class="reader-next-card__content">
+            <span class="reader-next-card__chip">Akan Datang</span>
+            <h2>${nextEp.title}</h2>
+            <p>Episode selanjutnya sedang dalam persiapan.</p>
+          </div>
+        </div>
+      `
+    }
+  } else {
+    nextSection = `
+      <h1 class="reader-next-heading">Kamu sudah membaca semua!</h1>
+      <div class="reader-next-card reader-next-card--notify">
+        <div class="reader-next-card__content reader-next-card__content--notify">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:40px;height:40px;margin:0 auto 16px;display:block;">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <p>Aktifkan notifikasi agar kamu tahu saat episode baru tersedia.</p>
+          <button class="reader-next-card__btn reel-notify-btn" type="button">Aktifkan Notifikasi</button>
+        </div>
+      </div>
+    `
+  }
+
+  // ── Rail: Artikel LAYA Lainnya ─────────────────────────────
+  const railHTML = railItems.length > 0 ? `
+    <section class="reader-next-more" aria-label="Artikel LAYA Lainnya">
+      <h2>Artikel LAYA Lainnya</h2>
+      <div class="reader-next-rail">
+        ${railItems.map(ep => `
+          <article data-goto="view-reader"
+                   data-series="${ep.seriesId}"
+                   data-ep="${ep.id}"
+                   style="cursor:pointer">
+            ${ep.thumbnail ? `<img src="${ep.thumbnail}" alt="${ep.seriesTitle || ep.title}" loading="lazy" />` : '<div class="reader-next-rail__placeholder"></div>'}
+            <h3>${ep.seriesTitle || ep.title}</h3>
+            <p>${ep.category || ''}</p>
+          </article>
+        `).join('')}
+      </div>
+    </section>
+  ` : ''
 
   return `
     <section class="reel-slide reel-end-slide" aria-label="Akhir episode">
-      <div class="reel-top">
-        <button class="music-btn" type="button" aria-label="Play/Pause musik">
-          <span class="music-bars"><span></span><span></span><span></span><span></span></span>
-        </button>
-        <a href="#" class="reel-close-btn" aria-label="Tutup">
-          <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M72 72l112 112M184 72 72 184"/></svg>
-        </a>
-      </div>
-      <div class="reel-end-center">
-        ${cardHTML}
-        <div class="reel-end-separator"></div>
-        <a class="reel-end-more" href="#" data-goto="view-index">
-          <span>Lihat Konten Laya Lainnya</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-        </a>
+      <a href="#" class="reader-next-close reel-close-btn" aria-label="Tutup">
+        <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M72 72l112 112M184 72 72 184"/></svg>
+      </a>
+      <div class="reader-next-page">
+        <img class="reader-next-logo" src="/assets/logo-laya2.png" alt="LAYA" />
+        ${nextSection}
+        <hr class="reader-next-separator" />
+        <a class="reader-next-more-btn" href="#" data-goto="view-index">Artikel Laya Lainnya</a>
+        ${railHTML}
       </div>
     </section>
-  `
-}
-
-function buildEndCardContent(nextEp, seriesId) {
-  if (!nextEp) {
-    return `
-      <div class="reel-end-card reel-end-card--notify">
-        <svg class="reel-end-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <div class="reel-end-card__content">
-          <h3>Kamu sudah membaca semua episode!</h3>
-          <p>Aktifkan notifikasi agar kamu tahu saat episode baru tersedia.</p>
-        </div>
-        <button class="reel-end-card__btn reel-notify-btn" type="button">Aktifkan Notifikasi</button>
-      </div>
-    `
-  }
-
-  if (nextEp.isPublished) {
-    return `
-      <a class="reel-end-card reel-end-card--next"
-         href="#"
-         data-goto="view-reader"
-         data-series="${seriesId}"
-         data-ep="${nextEp.id}">
-        ${nextEp.cardImage ? `<img class="reel-end-card__bg" src="${nextEp.cardImage}" alt="${nextEp.title}" />` : ''}
-        <div class="reel-end-card__content">
-          <span class="reel-end-card__chip">Episode Berikutnya</span>
-          <h3>${nextEp.title}</h3>
-          ${nextEp.date ? `<p>${nextEp.date}</p>` : ''}
-          <div class="reel-end-card__btn">Baca Sekarang</div>
-        </div>
-      </a>
-    `
-  }
-
-  return `
-    <div class="reel-end-card reel-end-card--soon">
-      ${nextEp.cardImage ? `<img class="reel-end-card__bg" src="${nextEp.cardImage}" alt="${nextEp.title}" />` : ''}
-      <div class="reel-end-card__content">
-        <span class="reel-end-card__chip reel-end-card__chip--soon">Akan Datang</span>
-        <h3>${nextEp.title}</h3>
-        <p>Episode selanjutnya sedang dalam persiapan.</p>
-      </div>
-    </div>
   `
 }
 

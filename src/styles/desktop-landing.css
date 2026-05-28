@@ -1,0 +1,237 @@
+/* ============================================================
+   DESKTOP LANDING — port langsung dari tato-dayak.html reference
+   Scoped di bawah .desktop-landing-view
+   ============================================================ */
+
+@font-face {
+  font-family: "Inter SemiBold TTF";
+  src: url("/assets/Inter-SemiBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+
+.desktop-landing-view {
+  --canvas-width: 1440px;
+  --header-black: #000000;
+  --line-color: #383838;
+  min-width: var(--canvas-width);
+  background: #000000;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  letter-spacing: -0.2px;
+}
+
+.desktop-landing-view * {
+  box-sizing: border-box;
+}
+
+/* ---- Header ---- */
+.desktop-landing-view .site-header {
+  width: 100%;
+  height: 64px;
+  overflow: hidden;
+  background: var(--header-black);
+  border-bottom: 1px solid var(--line-color);
+}
+
+.desktop-landing-view .site-header__top {
+  height: 64px;
+}
+
+.desktop-landing-view .site-header__frame {
+  position: relative;
+  width: var(--canvas-width);
+  height: 100%;
+  margin: 0 auto;
+}
+
+.desktop-landing-view .brand {
+  position: absolute;
+  left: 185px;
+  top: 18px;
+  display: block;
+  text-decoration: none;
+  color: #fff;
+}
+
+.desktop-landing-view .brand__logo {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.desktop-landing-view .account-button {
+  position: absolute;
+  left: 1226px;
+  top: 18px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.desktop-landing-view .account-button svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 12;
+}
+
+/* ---- Cover ---- */
+.desktop-landing-view .tato-dayak-cover {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  background: #000000;
+}
+
+/* ---- Hero ---- */
+.desktop-landing-view .tato-hero {
+  position: relative;
+  width: var(--canvas-width);
+  min-height: 650px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #000000;
+}
+
+.desktop-landing-view .tato-hero__background {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 37%, rgba(255, 206, 130, 0.18), transparent 27%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.16) 38%, #000000 76%, #000000 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, rgba(0, 0, 0, 0.05) 42%, rgba(0, 0, 0, 0.92) 100%),
+    var(--hero-bg-image, url("/assets/tato-dayak-hero-bg.png"));
+  background-position: center top;
+  background-size: cover;
+}
+
+.desktop-landing-view .tato-hero__content {
+  position: relative;
+  z-index: 1;
+  width: 755px;
+  margin-left: 565px;
+  padding-top: 83px;
+  padding-bottom: 83px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.desktop-landing-view .tato-hero__brand {
+  display: block;
+  width: 188px;
+  height: auto;
+  margin: 0 auto 31px;
+}
+
+.desktop-landing-view .tato-hero h1 {
+  margin: 0 0 21px;
+  color: #ffffff;
+  font-family: "Inter SemiBold TTF", Inter, Arial, Helvetica, sans-serif;
+  font-size: 48px;
+  font-synthesis: none;
+  font-weight: normal;
+  line-height: 60px;
+  letter-spacing: -0.8px;
+}
+
+.desktop-landing-view .tato-hero__content > p {
+  width: 690px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.94);
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: -0.2px;
+}
+
+/* ---- App Gate ---- */
+.desktop-landing-view .tato-app-gate {
+  display: grid;
+  grid-template-columns: 353px 352px;
+  align-items: center;
+  gap: 16px;
+  width: 753px;
+  margin-top: 43px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 22px;
+  background: rgba(0, 0, 0, 0.18);
+  text-align: left;
+}
+
+.desktop-landing-view .tato-app-gate__copy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.desktop-landing-view .tato-app-icon {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.desktop-landing-view .tato-app-gate h2 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-family: "Inter SemiBold TTF", Inter, Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-synthesis: none;
+  font-weight: normal;
+  line-height: 26px;
+  letter-spacing: -0.4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.desktop-landing-view .tato-app-gate__copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: -0.2px;
+  text-align: center;
+}
+
+/* ---- QR Box ---- */
+.desktop-landing-view .tato-qr-box {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  align-items: center;
+  gap: 12px;
+  width: 352px;
+  height: 163px;
+  padding: 16px;
+  border-radius: 7px;
+  background: #252628;
+}
+
+.desktop-landing-view .tato-qr {
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+}
+
+.desktop-landing-view .tato-qr-box p {
+  margin: 0;
+  color: #ffffff;
+  font-family: "Inter SemiBold TTF", Inter, Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-synthesis: none;
+  font-weight: normal;
+  line-height: 22px;
+  letter-spacing: -0.2px;
+}

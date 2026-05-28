@@ -60,6 +60,7 @@ export async function getLatestEpisodes(limit = 5) {
   const res = await get(`/episodes/latest?limit=${limit}`)
   return res.data.map(ep => ({
     id:          ep.id,
+    number:      ep.number ?? null,
     title:       ep.title,
     seriesId:    ep.series?.id || ep.series_id,
     seriesTitle: ep.series?.title || '',

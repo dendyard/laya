@@ -160,27 +160,20 @@ export async function renderLandingView(el, { seriesId } = {}) {
           <img src="/assets/logogram-kompascom.svg" alt="Kompas.com" />
         </a>
         <div class="landing-site-header__actions">
-          <a class="landing-site-header__subscribe" href="https://www.kompas.id" target="_blank" rel="noopener">Langganan Kompas.id</a>
+          <button class="landing-site-header__avatar" aria-label="Akun">
+            <svg viewBox="0 0 256 256" aria-hidden="true">
+              <circle cx="128" cy="128" r="96" stroke-width="18"/>
+              <circle cx="128" cy="104" r="32" stroke-width="18"/>
+              <path d="M72 198c14-33 43-46 56-46s42 13 56 46" stroke-width="18"/>
+            </svg>
+          </button>
         </div>
       </div>
-      <nav class="landing-site-nav" aria-label="Navigasi utama">
-        <a href="#">News</a>
-        <a href="#">Tekno</a>
-        <a href="#">Otomotif</a>
-        <a href="#">Bola</a>
-        <a href="#">Lifestyle</a>
-        <a href="#">Tren</a>
-        <a href="#">Health</a>
-        <a href="#">Food</a>
-        <a href="#">Edukasi</a>
-        <a href="#">Money</a>
-        <a href="#">Travel</a>
-        <a href="#">Lainnya</a>
-      </nav>
     </header>
 
     <!-- Desktop hero -->
     <main class="landing-desktop-hero" aria-label="${seriesTitle}">
+      <section class="landing-desktop-section">
       <div class="landing-desktop-hero__bg" style="background-image: url('${heroImage}')" aria-hidden="true"></div>
       <div class="landing-desktop-content">
         <img class="landing-desktop-brand" src="/assets/logo-laya.png" alt="Laya Langkah Budaya Merawat Indonesia" />
@@ -204,6 +197,7 @@ export async function renderLandingView(el, { seriesId } = {}) {
           </div>
         </div>
       </div>
+      </section>
     </main>
   `
 }

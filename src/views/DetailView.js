@@ -25,7 +25,7 @@ export async function renderDetailView(container, { seriesId = 1, onNavigate, on
       <span>${ep.number}</span>
       <div>
         <h2>${ep.title}</h2>
-        <time>${ep.date}</time>
+        <time>${ep.date || ''}</time>
       </div>
       ${ep.isLocked ? '<i aria-hidden="true"></i>' : ''}
     </article>
@@ -63,7 +63,6 @@ export async function renderDetailView(container, { seriesId = 1, onNavigate, on
         <h2 id="premiumBlockerTitle">Konten Premium</h2>
         <p>Gabung Membership KOMPAS.com+ MAX untuk mengakses konten premium ini.</p>
         <a href="#">Gabung KOMPAS.com+ MAX</a>
-        <strong>Rp69.000/bulan atau Rp599.000/tahun</strong>
       </section>
     </div>
   `

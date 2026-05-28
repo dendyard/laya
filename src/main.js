@@ -5,6 +5,7 @@ import './styles/detail.css'
 import './styles/reader.css'
 import './styles/components.css'
 import './styles/landing.css'
+import './styles/desktop-landing.css'
 
 import { initRouter, navigate, getRouteFromURL } from './router.js'
 import { initBrowserBanner, detectBrowser } from './utils/browserDetect.js'
@@ -12,6 +13,7 @@ import { renderHomeView } from './views/HomeView.js'
 import { renderDetailView } from './views/DetailView.js'
 import { renderReaderView, deactivateReaderView } from './views/ReaderView.js'
 import { renderLandingView } from './views/LandingView.js'
+import { renderDesktopLandingView } from './views/DesktopLandingView.js'
 
 const app = document.getElementById('app')
 
@@ -109,12 +111,19 @@ const browserInfo = detectBrowser()
 console.log('[BrowserDetect]', browserInfo)
 
 // Jika diakses via browser standar (bukan in-app / WebView), tampilkan landing page
-if (browserInfo.isStandard) {
-  const { series } = getRouteFromURL()
+// TODO: re-enable setelah selesai development
+if (false && browserInfo.isStandard) {
+  const { series, page } = getRouteFromURL()
+  const seriesId = series || null
+  const isDesktop = page === 'desktop' || (page !== 'mobile' && window.innerWidth >= 1024)
   const landingEl = document.createElement('div')
   landingEl.id = 'view-landing'
   app.appendChild(landingEl)
-  renderLandingView(landingEl, { seriesId: series || null })
+  if (isDesktop) {
+    renderDesktopLandingView(landingEl, { seriesId })
+  } else {
+    renderLandingView(landingEl, { seriesId })
+  }
 } else {
   initBrowserBanner()
   // Mulai dari URL saat ini

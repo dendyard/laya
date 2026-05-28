@@ -237,108 +237,95 @@
   line-height: 16px;
 }
 
+/* Hide desktop-only elements by default (mobile-first) */
+.landing-site-header { display: none; }
+.landing-desktop-hero { display: none; }
+
 /* ============================================================
-   DESKTOP LAYOUT  (≥ 768px)
+   DESKTOP LAYOUT  (≥ 1024px) — matches tato-dayak.html reference
    ============================================================ */
-@media (min-width: 768px) {
-  /* Reset mobile-only parts */
-  .landing-root {
-    background: #000;
-  }
+@media (min-width: 1024px) {
 
   /* ---- Site header ---- */
-  .landing-topbar {
-    display: none; /* replaced by .landing-site-header */
-  }
   .landing-site-header {
     display: block;
+    position: relative;
     width: 100%;
-    background: #1a1a1a;
+    height: 64px;
+    overflow: hidden;
+    background: #000;
+    border-bottom: 1px solid #383838;
   }
   .landing-site-header__top {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    width: min(100%, 1280px);
+    position: relative;
+    width: 1440px;
     height: 64px;
     margin: 0 auto;
-    padding: 0 32px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
   .landing-site-header__logo {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
+    position: absolute;
+    top: 18px;
+    left: 185px;
+    display: block;
+    text-decoration: none;
   }
   .landing-site-header__logo img {
-    width: 32px;
-    height: 32px;
+    display: block;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
   }
   .landing-site-header__actions {
+    position: absolute;
+    top: 18px;
+    right: 185px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-left: auto;
   }
-  .landing-site-header__subscribe {
-    display: inline-flex;
+  .landing-site-header__avatar {
+    display: flex;
     align-items: center;
-    height: 34px;
-    padding: 0 16px;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
     border: 0;
-    border-radius: 6px;
-    background: #e55425;
+    background: transparent;
     color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
+    cursor: pointer;
   }
-  .landing-site-nav {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    width: min(100%, 1280px);
-    height: 48px;
-    margin: 0 auto;
-    padding: 0 32px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .landing-site-nav::-webkit-scrollbar { display: none; }
-  .landing-site-nav a {
-    flex: 0 0 auto;
-    padding: 0 12px;
-    color: rgba(255,255,255,0.8);
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 48px;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color 150ms;
-  }
-  .landing-site-nav a:hover { color: #fff; }
-
-  /* ---- Page (desktop resets) ---- */
-  .landing-page {
-    display: none; /* replaced by .landing-desktop-hero */
+  .landing-site-header__avatar svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 12;
   }
 
-  /* ---- Desktop hero ---- */
+  /* ---- Desktop cover wrapper ---- */
   .landing-desktop-hero {
-    display: flex;
-    align-items: stretch;
-    position: relative;
+    display: block;
     width: 100%;
-    min-height: calc(100vh - 112px);
+    min-height: calc(100vh - 64px);
+    background: #000;
+  }
+
+  /* ---- Desktop hero section ---- */
+  .landing-desktop-section {
+    position: relative;
+    width: 1440px;
+    min-height: 650px;
+    margin: 0 auto;
     overflow: hidden;
     background: #000;
   }
   .landing-desktop-hero__bg {
     position: absolute;
     inset: 0;
-    background-position: left center;
+    background-position: center top;
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -346,101 +333,111 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.18) 38%, rgba(0,0,0,0.92) 68%, #000 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 42%, rgba(0,0,0,0.9) 100%);
+      radial-gradient(circle at 18% 37%, rgba(255,206,130,0.18), transparent 27%),
+      linear-gradient(90deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 38%, #000 76%, #000 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.05) 42%, rgba(0,0,0,0.92) 100%);
     content: "";
   }
+
+  /* ---- Content panel ---- */
   .landing-desktop-content {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 640px;
-    margin-left: auto;
-    padding: 80px 60px 80px 40px;
+    width: 755px;
+    margin-left: 565px;
+    padding-top: 83px;
+    padding-bottom: 83px;
+    color: #fff;
     text-align: center;
   }
   .landing-desktop-brand {
     display: block;
-    width: 180px;
+    width: 188px;
     height: auto;
-    margin: 0 auto 28px;
+    margin: 0 auto 31px;
     object-fit: contain;
   }
   .landing-desktop-content h1 {
-    margin: 0 0 20px;
+    margin: 0 0 21px;
     color: #fff;
-    font-size: 42px;
-    font-weight: 700;
+    font-size: 48px;
+    font-weight: 600;
     letter-spacing: -0.8px;
-    line-height: 54px;
+    line-height: 60px;
   }
   .landing-desktop-content > p {
-    margin: 0 auto 40px;
-    max-width: 520px;
-    color: rgba(255,255,255,0.9);
-    font-size: 16px;
+    width: 690px;
+    margin: 0 auto 43px;
+    color: rgba(255,255,255,0.94);
+    font-size: 17px;
     font-weight: 400;
-    letter-spacing: -0.2px;
     line-height: 25px;
+    letter-spacing: -0.2px;
   }
 
-  /* ---- App gate (desktop) ---- */
+  /* ---- App gate ---- */
   .landing-desktop-gate {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 353px 352px;
     align-items: center;
     gap: 16px;
+    width: 753px;
     padding: 16px;
-    border: 1px solid rgba(255,255,255,0.22);
-    border-radius: 20px;
-    background: rgba(0,0,0,0.3);
-    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 22px;
+    background: rgba(0,0,0,0.18);
     text-align: left;
   }
   .landing-desktop-gate__copy {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
   }
   .landing-desktop-gate__icon {
-    flex: 0 0 56px;
-    width: 56px;
-    height: 56px;
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
   }
+  .landing-desktop-gate__text {
+    text-align: center;
+  }
   .landing-desktop-gate__text h2 {
-    margin: 0 0 6px;
+    margin: 0 0 12px;
     color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    line-height: 24px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+    line-height: 26px;
+    text-align: center;
+    white-space: nowrap;
   }
   .landing-desktop-gate__text p {
     margin: 0;
-    color: rgba(255,255,255,0.78);
-    font-size: 13px;
+    color: rgba(255,255,255,0.86);
+    font-size: 14px;
     font-weight: 400;
-    line-height: 20px;
-    letter-spacing: -0.1px;
+    line-height: 21px;
+    letter-spacing: -0.2px;
+    text-align: center;
   }
   .landing-desktop-qr {
     display: grid;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 112px 1fr;
     align-items: center;
     gap: 12px;
-    padding: 14px;
-    border-radius: 10px;
-    background: #222;
+    width: 352px;
+    height: 163px;
+    padding: 16px;
+    border-radius: 7px;
+    background: #252628;
   }
   .landing-desktop-qr__code {
     display: grid;
     place-items: center;
-    width: 100px;
-    height: 100px;
-    border-radius: 6px;
+    width: 112px;
+    height: 112px;
+    border-radius: 4px;
     background: #fff;
     padding: 8px;
   }
@@ -450,17 +447,16 @@
   }
   .landing-desktop-qr__label {
     margin: 0;
-    color: rgba(255,255,255,0.9);
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 20px;
-    letter-spacing: -0.1px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+    letter-spacing: -0.2px;
   }
 
-  /* Hide mobile-only elements on desktop */
+  /* Show desktop-only, hide mobile-only */
   .landing-site-header { display: block; }
+  .landing-desktop-hero { display: block; }
+  .landing-topbar { display: none; }
+  .landing-page { display: none; }
 }
-
-/* Mobile: hide desktop-only elements */
-.landing-site-header { display: none; }
-.landing-desktop-hero { display: none; }

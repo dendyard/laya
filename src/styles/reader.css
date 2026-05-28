@@ -410,75 +410,144 @@
 .reel-slide.is-expanded .reel-page-chip { display: none; }
 
 /* ---- END SLIDE ---- */
+/* ============================================================
+   END SLIDE — design dari original-reader.html reference
+   ============================================================ */
 .reel-end-slide {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-}
-.reel-end-slide::after,
-.reel-end-slide::before { display: none; }
-.reel-end-center {
-  position: absolute;
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  width: 350px;
-}
-.reel-end-slide .reel-top a {
-  background: rgba(0,0,0,0.08);
-  color: #111;
-}
-.reel-end-slide .music-btn {
-  background: rgba(0,0,0,0.08);
-}
-.reel-end-slide .music-bars span {
-  background: #111;
-}
-
-/* ---- END CARD ---- */
-.reel-end-card {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-y: auto;
+  background: #000;
+  scrollbar-width: none;
+  /* override reel-slide defaults */
+  display: block;
   position: relative;
-  width: 350px;
-  height: 480px;
-  overflow: hidden;
-  border-radius: 20px;
-  background: #111;
+}
+.reel-end-slide::-webkit-scrollbar { display: none; }
+.reel-end-slide::before,
+.reel-end-slide::after { display: none; }
+
+/* ---- Close button ---- */
+.reader-next-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
   color: #fff;
   text-decoration: none;
 }
-/* Full-cover background image */
-.reel-end-card__bg {
+.reader-next-close svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 16;
+}
+
+/* ---- Scrollable page ---- */
+.reader-next-page {
+  width: 100%;
+  min-height: 100%;
+  padding: 16px 16px 60px;
+  color: #fff;
+}
+
+/* ---- Logo ---- */
+.reader-next-logo {
+  display: block;
+  width: 60px;
+  height: auto;
+  margin: 0 0 24px;
+  object-fit: contain;
+}
+
+/* ---- Heading ---- */
+.reader-next-heading {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 24px;
+  text-align: left;
+}
+
+/* ---- Next article card ---- */
+.reader-next-card {
+  position: relative;
+  display: block;
+  min-height: 410px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  background: #121212;
+  text-decoration: none;
+  color: #fff;
+}
+.reader-next-card::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 36%, rgba(0,0,0,0.72) 72%, #111 100%);
+  content: "";
+}
+.reader-next-card > img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: 410px;
   object-fit: cover;
 }
-/* Gradient overlay (mirip original-hero-index__media::after) */
-.reel-end-card--next::after,
-.reel-end-card--soon::after {
+.reader-next-card__content {
   position: absolute;
-  inset: 38% 0 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.86) 100%);
-  content: "";
-  pointer-events: none;
-}
-/* Content overlay di bawah */
-.reel-end-card__content {
-  position: absolute;
-  right: 16px;
-  bottom: 20px;
-  left: 16px;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  right: 18px;
+  bottom: 30px;
+  left: 18px;
+  z-index: 2;
   text-align: center;
 }
-.reel-end-card__chip {
+.reader-next-card__content h2 {
+  margin: 0 0 6px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 31px;
+}
+.reader-next-card__content p {
+  margin: 0 0 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 20px;
+}
+.reader-next-card__btn {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  color: #2a2a2a;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Chip — "Akan Datang" */
+.reader-next-card__chip {
   display: inline-flex;
   align-items: center;
-  align-self: center;
   height: 22px;
   margin-bottom: 8px;
   padding: 0 10px;
@@ -490,105 +559,110 @@
   letter-spacing: 0.2px;
   text-transform: uppercase;
 }
-.reel-end-card__chip--soon {
-  background: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.6);
-}
-.reel-end-card__content h3 {
-  margin: 0 0 4px;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  line-height: 24px;
-}
-.reel-end-card__content p {
-  margin: 0 0 14px;
-  color: rgba(255,255,255,0.65);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 18px;
-}
-.reel-end-card__btn {
+/* Notify / no-next-episode card */
+.reader-next-card--notify {
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 44px;
-  border: 0;
-  border-radius: 10px;
-  background: #fff;
-  color: #111;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12);
 }
-/* Notify card — tidak pakai gambar, layout vertikal center */
-.reel-end-card--notify {
+.reader-next-card--notify::after { display: none; }
+.reader-next-card__content--notify {
+  position: static;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  width: 350px;
-  height: 480px;
   padding: 32px 20px;
-  gap: 0;
-  background: #111;
 }
-.reel-end-card--notify .reel-end-card__icon {
-  width: 52px;
-  height: 52px;
-  margin-bottom: 16px;
-  padding: 14px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  stroke: rgba(255,255,255,0.8);
-  flex-shrink: 0;
-}
-.reel-end-card--notify .reel-end-card__content {
-  position: static;
-  width: 100%;
-  margin-bottom: 20px;
-}
-.reel-end-card--notify .reel-end-card__content h3 {
-  font-size: 16px;
-  line-height: 22px;
-  margin-bottom: 6px;
-}
-.reel-end-card--notify .reel-end-card__content p {
-  font-size: 13px;
-  line-height: 19px;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 0;
-}
-.reel-end-card--notify .reel-end-card__btn { width: 100%; }
-/* Soon card — non-interactive */
-.reel-end-card--soon { cursor: default; }
-
-.reel-end-separator {
-  margin: 16px 0;
-  border: 0;
-  border-top: 1px solid rgba(0,0,0,0.1);
-}
-.reel-end-more {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 4px 0 4px;
-  color: #444;
+.reader-next-card__content--notify p {
+  margin: 0 0 24px;
+  color: rgba(255,255,255,0.6);
   font-size: 14px;
+  line-height: 20px;
+}
+.reader-next-card__content--notify .reader-next-card__btn {
+  width: 200px;
+}
+/* Soon card — non-interactive */
+.reader-next-card--soon { cursor: default; }
+
+/* ---- Separator + more button ---- */
+.reader-next-separator {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.reader-next-more-btn {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 44px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  background: #000;
+  color: #fff;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.2px;
   text-decoration: none;
-  cursor: pointer;
 }
-.reel-end-more:hover { color: #111; }
-.reel-end-more svg {
-  flex: 0 0 18px;
-  width: 18px;
-  height: 18px;
-  opacity: 0.5;
-  stroke: #111;
+
+/* ---- More rail ---- */
+.reader-next-more {
+  margin-top: 22px;
+}
+.reader-next-more h2 {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 24px;
+}
+.reader-next-rail {
+  display: flex;
+  gap: 12px;
+  width: calc(100% + 16px);
+  margin-right: -16px;
+  overflow-x: auto;
+  padding: 0 16px 0 0;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.reader-next-rail::-webkit-scrollbar { display: none; }
+.reader-next-rail article {
+  flex: 0 0 152px;
+  scroll-snap-align: start;
+}
+.reader-next-rail img {
+  display: block;
+  width: 152px;
+  height: 190px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.reader-next-rail__placeholder {
+  width: 152px;
+  height: 190px;
+  border-radius: 8px;
+  background: #222;
+}
+.reader-next-rail h3 {
+  margin: 10px 0 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 18px;
+}
+.reader-next-rail p {
+  margin: 0;
+  color: rgba(255,255,255,0.78);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  line-height: 16px;
 }
